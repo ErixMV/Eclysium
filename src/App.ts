@@ -2,6 +2,7 @@ import * as bodyParser from 'body-parser';
 import * as controllers from './api/controllers';
 import { Server } from '@overnightjs/core';
 import { Logger } from '@overnightjs/logger';
+import { Connection } from "./config/Connection"
 
 class App extends Server {
 
@@ -11,6 +12,7 @@ class App extends Server {
         super()
         this.app.use(bodyParser.json())
         this.app.use(bodyParser.urlencoded({extended: true}))
+        const connection = new Connection()
         this.setupControllers()
     }
 
