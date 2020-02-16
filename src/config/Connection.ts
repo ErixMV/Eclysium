@@ -6,7 +6,8 @@ export class Connection {
 
     private readonly options = {
         useNewUrlParser: true,
-        useUnifiedTopology: true
+        useUnifiedTopology: true,
+        useCreateIndex: true
     }
     /**
      *

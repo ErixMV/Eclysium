@@ -3,7 +3,7 @@ import { Controller, Middleware, Get, Put, Post, Delete } from '@overnightjs/cor
 import { Logger } from '@overnightjs/logger';
 import User from "../models/User.model"
 import UserService from "../services/User.service"
-import { Connection } from "../../config/Connection"
+import { testNewUser } from "../middlewares/User.middleware"
 
 
 @Controller('api/users')
@@ -14,6 +14,7 @@ export class UserController {
     @Get('')
     private async getUsers(req: Request, res: Response): Promise<any> {
         const result = await this.userService.allUsers()
+        Logger.Info(result.code)
 
         return res.status(result.code).json(result.response)
     }
@@ -36,16 +37,12 @@ export class UserController {
     // }
 
     @Post('')
+    @Middleware([testNewUser])
     private async newUser(req: Request, res: Response): Promise<any> {
-        // Logger.Info(req.body);
-        const result = await this.userService.setNewUser(req.body)
-        return res.send(req.body);
-        try {
-            const newUser = await User.create(req.body)
-            return res.status(201).json({success: newUser})
-        } catch (err) {
-            return res.status(400).json({ error: err.message})
-        }
+        const result = await this.userService.createUser(req.body)
+        Logger.Info(result.code)
+
+        return res.status(result.code).json(result.response)
     }
 
     // @Delete('')

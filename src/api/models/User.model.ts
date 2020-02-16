@@ -1,20 +1,27 @@
-import { Schema, Document, model } from "mongoose"
-import { UserInterface } from "./interfaces/User.interface"
-
+import { Schema, model } from "mongoose"
 
 const UserSchema: Schema = new Schema({
     id: Number,
     name: {
         type: String,
         minlength:[0],
-        maxlength: [9]
+        maxlength: [64],
     },
-    email: String,
-    role: {
+    email: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
-    pwd: String
+    role: {
+        type: Number,
+        default: 1
+    },
+    pwd: {
+        type: String,
+        minlength: 8,
+        maxlength: 64,
+        required: true
+    }
 }, {timestamps: true})
 
 export default model("User", UserSchema)

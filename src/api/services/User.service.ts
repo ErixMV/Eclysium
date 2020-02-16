@@ -14,7 +14,7 @@ export default class UserService {
         } catch (err) {
             return { 
                 code: 400,
-                response: err.message
+                response: { error: err.message }
             };
         }
     }
@@ -29,14 +29,14 @@ export default class UserService {
         } catch (err) {
             return { 
                 code: 400,
-                response: err.message
+                response: { error: err.message }
             };
         }
     }
 
-    public async setNewUser(body: Object): Promise<any> {
+    public async createUser(dataBody: Object): Promise<any> {
         try {
-            const user = await this.userRepository.setNewUser(body)
+            const user = await this.userRepository.setNewUser(dataBody)
             return {
                 code: 200,
                 response: user
@@ -44,7 +44,7 @@ export default class UserService {
         } catch (err) {
             return {
                 code: 400,
-                response: err.message
+                response: { error: err.message }
             }
         }
     }
