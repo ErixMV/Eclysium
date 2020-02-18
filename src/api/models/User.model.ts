@@ -22,6 +22,9 @@ const UserSchema: Schema = new Schema({
         minlength: 8,
         maxlength: 64,
         required: true
+    },
+    premium: {
+        type: Boolean
     }
 }, {timestamps: true})
 

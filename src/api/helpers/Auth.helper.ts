@@ -18,6 +18,9 @@ export default class AuthHelper {
         return jwtToken
     }
 
-    //  TODO: Create Compare tokens method
+    public async compareJwt(token: String): Promise<any> {
+        return jwt.verify(token, process.env.JWT_SECRET)
+    }
+
     //? Create refresh token method?
 }

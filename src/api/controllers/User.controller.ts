@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { Controller, Middleware, Get, Put, Post, Delete } from '@overnightjs/core';
+import { Controller, Middleware, Get, Put, Post, Delete, Patch } from '@overnightjs/core';
 import { Logger } from '@overnightjs/logger';
 import User from "../models/User.model"
 import UserService from "../services/User.service"
@@ -31,6 +31,8 @@ export class UserController {
         return res.status(result.code).json(result.response)
     }
 
+    
+
 
     
     // @Put(':msg')
@@ -58,8 +60,11 @@ export class UserController {
 
         if (result.code == 200)
             res.set('EclysiumAuthToken', result.authToken)
+            
         return res.status(result.code).json()
     }
+
+    
 
     // @Delete('')
     // private delMessage(req: Request, res: Response) {
