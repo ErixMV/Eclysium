@@ -47,6 +47,7 @@ export class UserController {
     @Post('')
     @Middleware([testNewUser])
     private async newUser(req: Request, res: Response): Promise<any> {
+
         const result = await this.userService.createUser(req.body)
 
         return res.status(result.code).json()
@@ -63,6 +64,17 @@ export class UserController {
             
         return res.status(result.code).json()
     }
+
+    //User update method
+    @Patch(":id")
+    private async update(req: Request, res: Response) {
+
+        const result = await this.userService.updateAccount(req.params.id, req.body)
+
+        return res.status(result.code).json()
+    }
+
+
 
     
 

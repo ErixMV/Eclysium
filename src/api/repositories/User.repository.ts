@@ -1,5 +1,6 @@
 import User from "../models/User.model"
 import INewUser from "../interfaces/NewUser.interface"
+import IUpdateUser from "../interfaces/UpdateUser.interface"
 
 //* Repository of user's model
 /**
@@ -24,7 +25,7 @@ export default class UserRepository {
     }
 
     // User by id
-    public async getOneUser(id: String): Promise<any> {
+    public async getById(id: String): Promise<any> {
         return User.findById(id)
     }
 
@@ -36,5 +37,10 @@ export default class UserRepository {
     // Returns one user, the parameters define the filter and the output
     public async filterUser(filter: Object, filterOutput: Object = this.defaultUserFilter): Promise<any> {
         return User.findOne(filter, filterOutput)
+    }
+
+    // Update user (only email and username)
+    public async updateUser(id: String, data: IUpdateUser) {
+        return User.updateOne({_id: id}, { $set: data})
     }
 }

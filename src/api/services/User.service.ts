@@ -2,6 +2,7 @@ import AuthHelper from "../helpers/Auth.helper"
 import BcryptHelper from "../helpers/Bcrypt.helper"
 import INewuser from "../interfaces/NewUser.interface"
 import ILoginData from "../interfaces/LoginData.interface"
+import IUpdateUser from "../interfaces/UpdateUser.interface"
 import UserRepository from "../repositories/User.repository"
 
 //* Service class for user's model
@@ -36,7 +37,7 @@ export default class UserService {
     // TODO: Falta especificar el proposito de este método y cambiar la llamada al repositorio
     public async oneUser(id: String): Promise<any> {        
         try {
-            const user = await this.userRepository.getOneUser(id)
+            const user = await this.userRepository.getById(id)
             return { code: 200 };
         } catch (err) {
             return { 
@@ -82,5 +83,17 @@ export default class UserService {
             return { code: 200, authToken: jwToken }
 
         } catch (err) { return { code: 400 } }
+    }
+
+    public async updateAccount(id: String, data: IUpdateUser) {
+
+        try {
+
+            // Update attempt
+            let user = await this.userRepository.updateUser(id, data)
+
+        } catch (err) { return { code: 400 } }
+
+        return { code: 200 }
     }
 }
