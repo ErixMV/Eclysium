@@ -1,5 +1,5 @@
 {
-  "name": "readed",
+  "name": "Eclysium",
   "version": "1.0.0",
   "description": "",
   "main": "src/server.ts",
@@ -9,7 +9,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "",
+  "author": "Erix Alexander Mamani Villacresis",
   "license": "ISC",
   "dependencies": {
     "@overnightjs/core": "^1.6.14",
