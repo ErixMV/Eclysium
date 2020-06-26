@@ -1,15 +1,17 @@
 import { Request, Response } from 'express';
-import { Controller, Middleware, Get, Put, Post, Delete, Patch } from '@overnightjs/core';
+import { ClassMiddleware, Controller, Middleware, Get, Put, Post, Delete, Patch } from '@overnightjs/core';
 import { Logger } from '@overnightjs/logger';
 import User from "../models/User.model"
 import UserService from "../services/User.service"
 import { testNewUser } from "../middlewares/User.middleware"
+// import * as cors from "cors"
 
 //* Controller of user's model
 /**
  ** Contains the calls to user requests in the api
  */
 @Controller('api/users')
+// @ClassMiddleware([cors()])
 export class UserController {
     
     private userService = new UserService()
@@ -44,9 +46,11 @@ export class UserController {
     // }
 
     // Register new user
-    @Post('')
+    @Post('/')
     @Middleware([testNewUser])
     private async newUser(req: Request, res: Response): Promise<any> {
+
+        console.log(req.body)
 
         const result = await this.userService.createUser(req.body)
 

@@ -1,7 +1,8 @@
 import { Request, Response, NextFunction } from "express"
 
 //! Change to helpers?
-const arrNewUserRequiredKeys = ['email','pwd', 'pwdConfirmation']
+const arrNewUserRequiredKeys = ['email','pwd']
+// const arrNewUserRequiredKeys = ['email','pwd', 'pwdConfirmation']
 
 export async function testNewUser( req: Request, res: Response, next: NextFunction) {
 
@@ -13,11 +14,13 @@ export async function testNewUser( req: Request, res: Response, next: NextFuncti
         return res.status(400).json({ error: "Required data missing" })
 
     // Checks if the required data are not empty
-    if (!body.email || !body.pwd || !body.pwdConfirmation)
+    if (!body.email || !body.pwd )
         return res.status(400).json({ error: "Required data missing" })
+    // if (!body.email || !body.pwd || !body.pwdConfirmation )
+    //     return res.status(400).json({ error: "Required data missing" })
 
-    if (body.pwd !== body.pwdConfirmation)
-        return res.status(400).json({ error: "Error proccesing data" })
+    // if (body.pwd !== body.pwdConfirmation)
+    //     return res.status(400).json({ error: "Error proccesing data" })
         
     next();
 }
