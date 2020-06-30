@@ -16,7 +16,7 @@ class App extends Server {
         super()
         this.app.use(bodyParser.json())
         this.app.use(bodyParser.urlencoded({extended: true}))
-        this.app.use(cors())
+        this.app.use(cors({ exposedHeaders: "*" }))
         const connection = new Connection()
         this.setupControllers()
     }

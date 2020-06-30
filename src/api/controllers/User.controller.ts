@@ -13,7 +13,6 @@ import { testNewUser } from "../middlewares/User.middleware"
 @Controller('api/users')
 // @ClassMiddleware([cors()])
 export class UserController {
-    
     private userService = new UserService()
 
     // Return users' data
@@ -33,10 +32,36 @@ export class UserController {
         return res.status(result.code).json(result.response)
     }
 
-    
+    // Login method
+    @Post("login")
+    private async login(req: Request, res: Response): Promise<any> {
+
+        const result: any = await this.userService.login(req.body)
+
+        if (result.code === 200) {
+            res.setHeader("Access-Control-Allow-Headers", "Authorization")
+            res.setHeader("Authorization", `Bearer ${result.authToken}`)
+        }
+
+        Logger.Info(`Login: ${result.code}`)
 
 
-    
+        return res.status(result.code).json();
+    }
+
+    // Register new user
+    @Post('/')
+    @Middleware([testNewUser])
+    private async newUser(req: Request, res: Response): Promise<any> {
+
+        const result = await this.userService.createUser(req.body)
+
+        return res.status(result.code).json()
+    }
+
+
+
+
     // @Put(':msg')
     // private putMessage(req: Request, res: Response) {
     //     Logger.Info(req.params.msg);
@@ -45,29 +70,7 @@ export class UserController {
     //     });
     // }
 
-    // Register new user
-    @Post('/')
-    @Middleware([testNewUser])
-    private async newUser(req: Request, res: Response): Promise<any> {
 
-        console.log(req.body)
-
-        const result = await this.userService.createUser(req.body)
-
-        return res.status(result.code).json()
-    }
-
-    // Login method
-    @Post("login")
-    private async login(req: Request, res: Response): Promise<any> {
-
-        const result = await this.userService.login(req.body)
-
-        if (result.code == 200)
-            res.set('EclysiumAuthToken', result.authToken)
-            
-        return res.status(result.code).json()
-    }
 
     //User update method
     @Patch(":id")
@@ -80,7 +83,7 @@ export class UserController {
 
 
 
-    
+
 
     // @Delete('')
     // private delMessage(req: Request, res: Response) {

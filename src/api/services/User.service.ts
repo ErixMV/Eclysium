@@ -73,7 +73,7 @@ export default class UserService {
             
             // Check if the password is correct
             const isValid: Boolean = await this.bcryptHelper.compareHash(data.pwd, userFound.pwd)
-
+            
             if (!isValid) return { code: 400 }
             
             // Creates a jwt that contains the user id
