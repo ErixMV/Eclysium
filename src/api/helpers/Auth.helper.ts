@@ -19,7 +19,13 @@ export default class AuthHelper {
     }
 
     public async compareJwt(token: String): Promise<any> {
-        return jwt.verify(token, process.env.JWT_SECRET)
+
+        try {
+            const test = await jwt.verify(token, process.env.JWT_SECRET);
+            return true;
+        } catch (error) {
+            return false;
+        }
     }
 
     //? Create refresh token method?
