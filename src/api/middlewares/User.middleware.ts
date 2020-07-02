@@ -29,20 +29,22 @@ export async function testNewUser(req: Request, res: Response, next: NextFunctio
 export async function testAuthorization(req: Request, res: Response, next: NextFunction) {
 
     const { headers: { authorization } } = req;
-
     const tokenSplited = authorization.split(' ');
-    if (tokenSplited.length === 2) {
-        const scheme = tokenSplited[0];
-        const credentials = tokenSplited[1];
 
-        if (/^Bearer$/i.test(scheme)) {
-            const token = credentials;
-            if (await new AuthHelper().compareJwt(token)) {
-                next();
-            } else {
-                res.status(403).json({ error: "No valid credentials." })
-            }
-        } else { res.status(403).json({ error: "No valid credentials." }) }
-    } else { res.status(403).json({ error: "No valid credentials." }) }
+    if (tokenSplited.length !== 2) { 
+        res.status(403).json({ error: "No valid credentials0." }) 
+    }
+
+    const [ scheme, token ] = tokenSplited;
+
+    if (!/^Bearer$/i.test(scheme)) {
+        res.status(403).json({ error: "No valid credentials1." })
+    }
+
+    if (!await new AuthHelper().compareJwt(token)) {
+        res.status(403).json({ error: "No valid credentials2." })
+    }
+
+    next();
 
 }
