@@ -1,7 +1,6 @@
-import { Schema, model } from "mongoose"
+import { Schema, model } from "mongoose";
 
 const UserSchema: Schema = new Schema({
-    id: Number,
     name: {
         type: String,
         minlength:[0],
@@ -26,6 +25,6 @@ const UserSchema: Schema = new Schema({
     premium: {
         type: Boolean
     }
-}, {timestamps: true})
+}, {timestamps: true});
 
-export default model("User", UserSchema)
+export default model("User", UserSchema);
