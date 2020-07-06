@@ -24,6 +24,7 @@ export default class AuthHelper {
             await jwt.verify(token, process.env.JWT_SECRET);
             return true;
         } catch (error) {
+            console.log(error)
             return false;
         }
     }
@@ -31,13 +32,20 @@ export default class AuthHelper {
     //! Method: Extract the data from payload
     public async extractData(authorization: String): Promise<any> {
 
-        const [ token ]  = authorization.split(' ').slice(-1);
-
+        
         try {
+            // Remove Bearer prefix
+            const [ token ]  = authorization.split(' ').slice(-1);
+
+            // Get user's id from jwt payload
             const { data } = await jwt.verify(token, process.env.JWT_SECRET);
-            return data;
+            
+            // Parsing id
+            const id = data.replace(/"/g, '');
+            return id;
+
         } catch (error) {
-            console.log(error);
+            return new Error(error.message)
         }
     }
 
