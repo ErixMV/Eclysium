@@ -3,7 +3,8 @@ import { ClassMiddleware, Controller, Middleware, Get, Put, Post, Delete, Patch 
 import { Logger } from '@overnightjs/logger';
 import User from "../models/User.model"
 import UserService from "../services/User.service"
-import { testNewUser } from "../middlewares/User.middleware"
+import { testNewUser, testAuthorization } from "../middlewares/User.middleware"
+import IServiceData from "../interfaces/ServiceData.interface"
 // import * as cors from "cors"
 
 //* Controller of user's model
@@ -24,6 +25,20 @@ export class UserController {
         return res.status(result.code).json(result.response)
     }
 
+    // Get logged user's data for account page
+    @Get('account')
+    @Middleware([testAuthorization])
+    private async getAccountData(req: Request, res: Response): Promise<any> {
+        try {
+            const result = await this.userService.loggedUserData(req.headers.authorization)
+            return res.status(result.code).json(result.response)
+        } catch (err) {
+            console.log(err)
+        }
+
+        // return res.send()
+    }
+
     // Get one user's data
     @Get(':id')
     private async getUser(req: Request, res: Response): Promise<any> {
@@ -36,17 +51,16 @@ export class UserController {
     @Post("login")
     private async login(req: Request, res: Response): Promise<any> {
 
-        const result: any = await this.userService.login(req.body)
+        const { code, response, ...result }: IServiceData = await this.userService.login(req.body);
 
-        if (result.code === 200) {
-            res.setHeader("Access-Control-Allow-Headers", "Authorization")
-            res.setHeader("Authorization", `Bearer ${result.authToken}`)
+        if (code === 200) {
+            res.setHeader("Access-Control-Allow-Headers", "Authorization");
+            res.setHeader("Authorization", `Bearer ${result.authToken}`);
         }
 
-        Logger.Info(`Login: ${result.code}`)
+        Logger.Info(`Login: ${code}`);
 
-
-        return res.status(result.code).json();
+        return res.status(code).json(response);
     }
 
     // Register new user
@@ -54,9 +68,9 @@ export class UserController {
     @Middleware([testNewUser])
     private async newUser(req: Request, res: Response): Promise<any> {
 
-        const result = await this.userService.createUser(req.body)
+        const result = await this.userService.createUser(req.body);
 
-        return res.status(result.code).json()
+        return res.status(result.code).json(result.response);
     }
 
 
