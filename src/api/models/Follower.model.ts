@@ -6,9 +6,9 @@ const FollowerSchema = new Schema({
         required: true,
         unique: true
     },
-    arrFollowed: {
+    arrFollowers: {
         type: [String]
     }
 });
 
-export default model("Followed", FollowerSchema);
+export default model("Follower", FollowerSchema);

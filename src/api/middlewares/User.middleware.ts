@@ -32,17 +32,17 @@ export async function testAuthorization(req: Request, res: Response, next: NextF
     const tokenSplited = authorization.split(' ');
 
     if (tokenSplited.length !== 2) { 
-        res.status(403).json({ error: "No valid credentials0." }) 
+        res.status(403).json({ error: "No valid credentials." }) 
     }
 
     const [ scheme, token ] = tokenSplited;
 
     if (!/^Bearer$/i.test(scheme)) {
-        res.status(403).json({ error: "No valid credentials1." })
+        res.status(403).json({ error: "No valid credentials." })
     }
 
     if (!await new AuthHelper().compareJwt(token)) {
-        res.status(403).json({ error: "No valid credentials2." })
+        res.status(403).json({ error: "No valid credentials." })
     }
 
     next();

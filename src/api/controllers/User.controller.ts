@@ -29,14 +29,9 @@ export class UserController {
     @Get('account')
     @Middleware([testAuthorization])
     private async getAccountData(req: Request, res: Response): Promise<any> {
-        try {
-            const result = await this.userService.loggedUserData(req.headers.authorization)
-            return res.status(result.code).json(result.response)
-        } catch (err) {
-            console.log(err)
-        }
-
-        // return res.send()
+        const result = await this.userService.loggedUserData(req.headers.authorization);
+        
+        return res.status(result.code).json(result.response);
     }
 
     // Get one user's data
@@ -68,9 +63,9 @@ export class UserController {
     @Middleware([testNewUser])
     private async newUser(req: Request, res: Response): Promise<any> {
 
-        const result = await this.userService.createUser(req.body);
+        const { code, response }: IServiceData = await this.userService.createUser(req.body);
 
-        return res.status(result.code).json(result.response);
+        return res.status(code).json(response);
     }
 
 

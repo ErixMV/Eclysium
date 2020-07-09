@@ -1,4 +1,6 @@
 import User from "../models/User.model"
+import Following from "../models/Following.model"
+import Follower from "../models/Follower.model"
 import INewUser from "../interfaces/NewUser.interface"
 import IUpdateUser from "../interfaces/UpdateUser.interface"
 
@@ -8,7 +10,7 @@ import IUpdateUser from "../interfaces/UpdateUser.interface"
  */
 export default class UserRepository {
 
-    private readonly defaultUserFilter: Object= {
+    private readonly defaultUserFilter: Object = {
         _id: 1,
         name: 1,
         email: 1,
@@ -25,22 +27,65 @@ export default class UserRepository {
     }
 
     // User by id
-    public async getById(id: String): Promise<any> {
-        return User.findById(id)
+    public async getById(id: any): Promise<any> {
+        return User.findById(id, this.defaultUserFilter);
     }
 
     // Create a new user
     public async setNewUser(dataBody: INewUser): Promise<any> {
-        return User.create(dataBody)
+        try {
+            const { _id }: { _id: String } = await User.create(dataBody);
+            return _id;
+        } catch (err) {
+            return false;
+        }
+    }
+
+    // Create following data for a new user
+    public async setNewFollowingData(newUserId: String): Promise<any> {
+        try {
+            await Following.create({ userId: newUserId, arrFollowing: [] });
+            return true;
+        } catch (err) {
+            return false;
+        }
+    }
+
+    //* Get following data for a new user
+    public async getFollowingData(userId: String): Promise<any> {
+        try {
+            return Following.findOne({ userId: userId }, { _id: 0, arrFollowing: 1 });
+        } catch (err) {
+            return false;
+        }
+    }
+
+    // Create following data for a new user
+    public async setNewFollowersData(newUserId: String): Promise<any> {
+        try {
+            await Follower.create({ userId: newUserId, arrFollowers: [] });
+            return true;
+        } catch (err) {
+            return false;
+        }
+    }
+
+    //* Get following data for a new user
+    public async getFollowersData(userId: String): Promise<any> {
+        try {
+            return Follower.findOne({ userId: userId }, { _id: 0, arrFollowers: 1 });
+        } catch (err) {
+            return false;
+        }
     }
 
     // Returns one user, the parameters define the filter and the output
     public async filterUser(filter: Object, filterOutput: Object = this.defaultUserFilter): Promise<any> {
-        return User.findOne(filter, filterOutput)
+        return User.findOne(filter, filterOutput);
     }
 
     // Update user (only email and username)
     public async updateUser(id: String, data: IUpdateUser) {
-        return User.updateOne({_id: id}, { $set: data})
+        return User.updateOne({ _id: id }, { $set: data })
     }
 }
